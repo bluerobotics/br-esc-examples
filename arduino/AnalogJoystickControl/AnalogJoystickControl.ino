@@ -69,45 +69,45 @@ Servo thrusterRight;
 Servo thrusterVertical;
 
 void setup() {
-	// Set up Arduino pins to send servo signals to ESCs
-	thrusterLeft.attach(THRUSTER_LEFT);
-	thrusterRight.attach(THRUSTER_RIGHT);
-	thrusterVertical.attach(THRUSTER_VERTICAL);
+  // Set up Arduino pins to send servo signals to ESCs
+  thrusterLeft.attach(THRUSTER_LEFT);
+  thrusterRight.attach(THRUSTER_RIGHT);
+  thrusterVertical.attach(THRUSTER_VERTICAL);
 
-	// Set output signal to 1500 microsecond pulse (stopped command)
-	thrusterLeft.setMicroseconds(CENTER_THROTTLE);
-	thrusterRight.setMicroseconds(CENTER_THROTTLE);
-	thrusterVertical.setMicroseconds(CENTER_THROTTLE);
+  // Set output signal to 1500 microsecond pulse (stopped command)
+  thrusterLeft.writeMicroseconds(CENTER_THROTTLE);
+  thrusterRight.writeMicroseconds(CENTER_THROTTLE);
+  thrusterVertical.writeMicroseconds(CENTER_THROTTLE);
 
-	// Delay to allow time for ESCs to initialize
-	delay(1000); 
+  // Delay to allow time for ESCs to initialize
+  delay(1000); 
 }
 
 void loop() {
-	// Read the joysticks and use the Arduino "map" function to map the raw values
-	// to the desired output commands.
-	int forwardCommand  	=	map(analogRead(JS_ADC_0), // Read raw joystick value
-		                       		JS_CENTER_0-JS_DIR_0*JS_RANGE_0, // Joystick low value
-		                       		JS_CENTER_0+JS_DIR_0*JS_RANGE_0, // Joystick high value
-		               		        -MAX_FWD_REV_THROTTLE, // Command low value
-		                  		     MAX_FWD_REV_THROTTLE); // Command high value
-	int turnCommand 	 		=	map(analogRead(JS_ADC_1), // Read raw joystick value
-		                    			JS_CENTER_1-JS_DIR_1*JS_RANGE_1, // Joystick low value
-		      			              JS_CENTER_1+JS_DIR_1*JS_RANGE_1, // Joystick high value
-		            			        -MAX_TURN_THROTTLE, // Command low value
-		                  			  MAX_TURN_THROTTLE); // Command high value
-	int verticalCommand   =	map(analogRead(JS_ADC_2), // Read raw joystick value
-		                      	  JS_CENTER_2-JS_DIR_2*JS_RANGE_2, // Joystick low value
-		                      	  JS_CENTER_2+JS_DIR_2*JS_RANGE_2, // Joystick high value
-		                      	  -MAX_VERTICAL_THROTTLE, // Command low value
-		                      	  MAX_VERTICAL_THROTTLE); // Command high value
+  // Read the joysticks and use the Arduino "map" function to map the raw values
+  // to the desired output commands.
+  int forwardCommand    = map(analogRead(JS_ADC_0), // Read raw joystick value
+                              JS_CENTER_0-JS_DIR_0*JS_RANGE_0, // Joystick low value
+                              JS_CENTER_0+JS_DIR_0*JS_RANGE_0, // Joystick high value
+                              -MAX_FWD_REV_THROTTLE, // Command low value
+                              MAX_FWD_REV_THROTTLE); // Command high value
+  int turnCommand       = map(analogRead(JS_ADC_1), // Read raw joystick value
+                              JS_CENTER_1-JS_DIR_1*JS_RANGE_1, // Joystick low value
+                              JS_CENTER_1+JS_DIR_1*JS_RANGE_1, // Joystick high value
+                              -MAX_TURN_THROTTLE, // Command low value
+                              MAX_TURN_THROTTLE); // Command high value
+  int verticalCommand   = map(analogRead(JS_ADC_2), // Read raw joystick value
+                              JS_CENTER_2-JS_DIR_2*JS_RANGE_2, // Joystick low value
+                              JS_CENTER_2+JS_DIR_2*JS_RANGE_2, // Joystick high value
+                              -MAX_VERTICAL_THROTTLE, // Command low value
+                              MAX_VERTICAL_THROTTLE); // Command high value
 
-	// Combine the "stopped" command with forward, turn, and vertical and send 
-	// to the ESCs.
-	thrusterLeft.setMicroseconds(CENTER_THROTTLE+forwardCommand+turnCommand);
-	thrusterRight.setMicroseconds(CENTER_THROTTLE+forwardCommand-turnCommand);
-	thrusterVertical.setMicroseconds(CENTER_THROTTLE+verticalCommand);
+  // Combine the "stopped" command with forward, turn, and vertical and send 
+  // to the ESCs.
+  thrusterLeft.writeMicroseconds(CENTER_THROTTLE+forwardCommand+turnCommand);
+  thrusterRight.writeMicroseconds(CENTER_THROTTLE+forwardCommand-turnCommand);
+  thrusterVertical.writeMicroseconds(CENTER_THROTTLE+verticalCommand);
 
-	// Delay 1/20th of a second. No need to update at super fast rates.
-	delay(50);
+  // Delay 1/20th of a second. No need to update at super fast rates.
+  delay(50);
 }
