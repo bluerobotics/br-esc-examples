@@ -69,6 +69,9 @@ Servo thrusterRight;
 Servo thrusterVertical;
 
 void setup() {
+  // Set up serial port to print inputs and outputs
+  Serial.begin(38400);
+
   // Set up Arduino pins to send servo signals to ESCs
   thrusterLeft.attach(THRUSTER_LEFT);
   thrusterRight.attach(THRUSTER_RIGHT);
@@ -108,6 +111,12 @@ void loop() {
   thrusterRight.writeMicroseconds(CENTER_THROTTLE+forwardCommand-turnCommand);
   thrusterVertical.writeMicroseconds(CENTER_THROTTLE+verticalCommand);
 
-  // Delay 1/20th of a second. No need to update at super fast rates.
-  delay(50);
+  // Output via serial
+  Serial.print("Fwd: "); Serial.print(forwardCommand);
+  Serial.print("Turn: "); Serial.print(forwardCommand);
+  Serial.print("Vert: "); Serial.print(forwardCommand);
+  Serial.println("");
+
+  // Delay 1/10th of a second. No need to update at super fast rates.
+  delay(10);
 }
