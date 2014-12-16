@@ -42,9 +42,9 @@ THE SOFTWARE.
 static const int JS_CENTER_0 = 511; // Analog reading at center, 0-1023
 static const int JS_CENTER_1 = 511;
 static const int JS_CENTER_2 = 511;
-static const int JS_RANGE_0 = 300; // Analog range, 0-1023
-static const int JS_RANGE_1 = 300;
-static const int JS_RANGE_2 = 300;
+static const int JS_RANGE_0 = 128; // Analog range, 0-1023
+static const int JS_RANGE_1 = 128; // Set to 128 for Parallax joystick
+static const int JS_RANGE_2 = 128;
 static const int JS_DIR_0 = 1; // +1 or -1
 static const int JS_DIR_1 = 1;
 static const int JS_DIR_2 = 1;
