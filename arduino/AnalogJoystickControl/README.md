@@ -1,9 +1,13 @@
 Analog Joystick Example
 =======================
 
+##Description
+
+This example provides a simple program for the Arduino microcontroller that reads from an analog joystick and outputs to three thrusters. It is designed for three thrusters, two forward and one vertical, and two [Parallax Joysticks](http://www.parallax.com/product/27808).
+
 ##Wiring
 
-1. Plug Parallax joystick interface boards into the breadboard.
+1. Plug [Parallax Joystick](http://www.parallax.com/product/27808) interface boards into the breadboard.
 
 2. Using wire jumpers, connect the *Vss* pins to the *5V* pin on the Arduino. Connect the *Vdd* pins to any of the *GND* pins on the Arduino.
 
