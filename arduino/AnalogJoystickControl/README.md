@@ -26,3 +26,9 @@ This example provides a simple program for the Arduino microcontroller that read
   * Vertical thruster ESC signal pin to Arduino pin *11*
 
 6. Supply 12V power to the ESCs via the red and black cables.
+
+##Wiring Diagram
+
+This diagram shows how the wires should be connected to the Parallax joystick boards as well as the ESC plugs. Make sure to power the ESCs with 12V also by connecting the black wire to ground (negative) and the red wire to 12V (positive).
+
+![Wiring Diagram](https://raw.githubusercontent.com/bluerobotics/br-esc-examples/master/arduino/AnalogJoystickControl/AnalogJoystickControl-Diagram-rev1.png "Wiring Diagram for Joystick Example")
