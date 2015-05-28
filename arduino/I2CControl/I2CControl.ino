@@ -45,7 +45,7 @@ THE SOFTWARE.
 // temp. for nominal resistance (almost always 25 C)
 #define TEMPERATURENOMINAL 25   
 // The beta coefficient of the thermistor (usually 3000-4000)
-#define BCOEFFICIENT 3950
+#define BCOEFFICIENT 3900
 // the value of the 'other' resistor
 #define SERIESRESISTOR 3300    
 
@@ -122,23 +122,28 @@ void loop() {
   static uint32_t writeTimer = 0;
   static uint32_t readTimer = 0;
   
+  static int16_t signal = 0;
+  
   if ( millis() - writeTimer > 100 ) {
     writeTimer = millis();
-
-    static int16_t signal = 0;
-    static int16_t increment = 50;
+  
+    static int16_t increment = 200;
+    
+    if (Serial.available()) {
+      signal = Serial.parseInt();
+    }
     
     //Serial.print("Sending ");Serial.print(signal);
     setESC(I2C_ADDR,signal);
     
-    signal += increment;
+    /*signal += increment;
     
-    if ( abs(signal) > 6000 ) {
+    if ( abs(signal) > 32500 ) {
       increment = -increment;
-    }
+    }*/
   }
   
-  if ( micros() - readTimer > 1000000 ) {
+  if ( micros() - readTimer > 100000 ) {
     uint32_t dt = micros() - readTimer;
     
     readTimer = micros();
@@ -157,10 +162,20 @@ void loop() {
     steinhart = 1.0 / steinhart;                 // Invert
     steinhart -= 273.15;                         // convert to C
     
-    Serial.print("RPM:  ");Serial.println(rpm/(dt/1000000.0f)*60/6);
+    static float current;
+    
+    current = current*0.9 + (float(curr)-33344)/65535.0f*5*14.706*0.1;
+    
+    Serial.write(27);       // ESC command
+    Serial.print("[2J");    // clear screen command
+    Serial.write(27);
+    Serial.print("[H");     // cursor to home command    
+    Serial.print("Thro: ");Serial.println(signal);
+    Serial.print("RPM:  ");Serial.println(int(rpm/(dt/1000000.0f)*60/6));
     Serial.print("VBat: ");Serial.println(float(vbat)/65536*5*6.45);
     Serial.print("Temp: ");Serial.println(steinhart);
-    Serial.print("Curr: ");Serial.println((float(curr)-32768)/65536*5*14.706);    
+    Serial.print("Curr: ");Serial.println(current);
+    Serial.print("Powr: ");Serial.println(current*float(vbat)/65536*5*6.45);       
     Serial.println("---------------------");
   }
 }
