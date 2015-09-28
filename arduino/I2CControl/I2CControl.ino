@@ -36,6 +36,8 @@ THE SOFTWARE.
 
 // See here for example: https://github.com/balrog-kun/autopilot/blob/lpc1343/actuators-i2c.h
 
+#define TWI_FREQ 10000l // This slows the I2C bus to improve long distance comm.
+
 #include <Wire.h>
 
 #define I2C_ADDR 0x29
@@ -86,16 +88,10 @@ void initESC(uint8_t address) {
 void setESC(uint8_t address, int16_t value) {  
   uint16_t output;
 
-  if ( value < 0 ) {
-    output = (-value)|((1<<15)&0x8000);
-  } else {
-    output = value;
-  }
-
   Wire.beginTransmission(address);
   Wire.write(0x00);
-  Wire.write(output>>8);
-  Wire.write(output);
+  Wire.write(value>>8);
+  Wire.write(value);  
   Wire.endTransmission();
 }
 
@@ -112,7 +108,7 @@ void readSensors(uint8_t address, uint16_t *rpm, uint16_t *vbat, uint16_t *temp,
 
 void setup() {
   Wire.begin();
-  Serial.begin(19200);
+  Serial.begin(57600);
   Serial.println("Starting");
   
   initESC(I2C_ADDR);
@@ -124,7 +120,7 @@ void loop() {
   
   static int16_t signal = 0;
   
-  if ( millis() - writeTimer > 100 ) {
+  if ( millis() - writeTimer > 10 ) {
     writeTimer = millis();
   
     static int16_t increment = 200;
@@ -133,14 +129,13 @@ void loop() {
       signal = Serial.parseInt();
     }
     
-    //Serial.print("Sending ");Serial.print(signal);
-    setESC(I2C_ADDR,signal);
+    setESC(I2C_ADDR,signal);    
     
-    /*signal += increment;
+    //signal += increment;
     
     if ( abs(signal) > 32500 ) {
       increment = -increment;
-    }*/
+    }
   }
   
   if ( micros() - readTimer > 100000 ) {
@@ -164,18 +159,18 @@ void loop() {
     
     static float current;
     
-    current = current*0.9 + (float(curr)-33344)/65535.0f*5*14.706*0.1;
+    current = current*0.9 + (float(curr)-32767)/65535.0f*5*14.706*0.1;
     
     Serial.write(27);       // ESC command
     Serial.print("[2J");    // clear screen command
     Serial.write(27);
     Serial.print("[H");     // cursor to home command    
-    Serial.print("Thro: ");Serial.println(signal);
-    Serial.print("RPM:  ");Serial.println(int(rpm/(dt/1000000.0f)*60/6));
-    Serial.print("VBat: ");Serial.println(float(vbat)/65536*5*6.45);
-    Serial.print("Temp: ");Serial.println(steinhart);
-    Serial.print("Curr: ");Serial.println(current);
-    Serial.print("Powr: ");Serial.println(current*float(vbat)/65536*5*6.45);       
+    Serial.print("Throttle: ");Serial.print(signal);Serial.println(" us");
+    Serial.print("RPM:      ");Serial.print(int(rpm/(dt/1000000.0f)*60/6));Serial.println(" rpm");
+    Serial.print("VBat:     ");Serial.print(float(vbat)/65536*5*6.45);Serial.println(" V");
+    Serial.print("Temp:     ");Serial.print(steinhart);Serial.println(" `C");
+    Serial.print("Current:  ");Serial.print(current);Serial.println(" A");
+    Serial.print("Power:    ");Serial.print(current*float(vbat)/65536*5*6.45);Serial.println(" W");
     Serial.println("---------------------");
   }
 }

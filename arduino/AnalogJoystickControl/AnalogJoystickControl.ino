@@ -113,10 +113,10 @@ void loop() {
 
   // Output via serial
   Serial.print("Fwd: "); Serial.print(forwardCommand);
-  Serial.print("Turn: "); Serial.print(forwardCommand);
-  Serial.print("Vert: "); Serial.print(forwardCommand);
+  Serial.print("Turn: "); Serial.print(turnCommand);
+  Serial.print("Vert: "); Serial.print(verticalCommand);
   Serial.println("");
 
   // Delay 1/10th of a second. No need to update at super fast rates.
-  delay(10);
+  delay(100);
 }
