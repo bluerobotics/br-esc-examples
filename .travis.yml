@@ -7,7 +7,10 @@ cache:
         - "~/.platformio"
 
 env:
-    - PLATFORMIO_CI_SRC=arduino/*/*.ino
+    - PLATFORMIO_CI_SRC=arduino/AnalogInToESC/*.ino
+    - PLATFORMIO_CI_SRC=arduino/AnalogJoystickControl/*.ino
+    - PLATFORMIO_CI_SRC=arduino/BareMinimum/*.ino
+    - PLATFORMIO_CI_SRC=arduino/I2CControl/*.ino
 
 install:
     - pip install -U platformio
