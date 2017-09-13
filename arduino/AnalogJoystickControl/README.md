@@ -1,11 +1,11 @@
 Analog Joystick Example
 =======================
 
-##Description
+## Description
 
 This example provides a simple program for the Arduino microcontroller that reads from an analog joystick and outputs to three thrusters. It is designed for three thrusters, two forward and one vertical, and two [Parallax Joysticks](http://www.parallax.com/product/27808).
 
-##Wiring
+## Wiring
 
 1. Plug [Parallax Joystick](http://www.parallax.com/product/27808) interface boards into the breadboard.
 
@@ -27,7 +27,7 @@ This example provides a simple program for the Arduino microcontroller that read
 
 6. Supply 12V power to the ESCs via the red and black cables.
 
-##Wiring Diagram
+## Wiring Diagram
 
 This diagram shows how the wires should be connected to the Parallax joystick boards as well as the ESC plugs. Make sure to power the ESCs with 12V also by connecting the black wire to ground (negative) and the red wire to 12V (positive).
 

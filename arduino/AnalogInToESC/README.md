@@ -1,13 +1,13 @@
 Analog Input to ESC Output
 ==========================
 
-##Description
+## Description
 
 This example provides code that translates an analog input to a ESC command. This can be used to provide compatibility with controllers that output analog signals or to control the speed directly with a potentiometer or other analog device. It is configured to use a logical input (+5V or 0V) to determine rotation direction. 
 
 The code is written to work with Blue Robotics Basic ESC and BlueESC, however it can be adapted for use with any ESC.
 
-##Wiring
+## Wiring
 
 1. Connect analog input signals to A0 and A1 on the Arduino.
 
