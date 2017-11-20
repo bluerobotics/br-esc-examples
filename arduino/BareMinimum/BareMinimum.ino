@@ -1,12 +1,12 @@
 /* Blue Robotics Example Code
 -------------------------------
- 
+
 Title: Bare Minimum for ESC Control (Arduino)
 
-Description: This example code shows the bare minimum to get up and 
-running with the Blue Robotics Basic ESC and BlueESC using PWM signals. 
+Description: This example code shows the bare minimum to get up and
+running with the Blue Robotics Basic ESC and BlueESC using PWM signals.
 
-The code is designed for the Arduino Uno board and can be compiled and 
+The code is designed for the Arduino Uno board and can be compiled and
 uploaded via the Arduino 1.0+ software.
 
 -------------------------------

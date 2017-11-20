@@ -1,16 +1,16 @@
 /* Blue Robotics Example Code
 -------------------------------
- 
+
 Title: Analog Input to ESC Output (Arduino)
 
-Description: This code is an example of how to control the Blue Robotics 
-Thrusters and ESCs with an analog input signal. This can be useful to work 
+Description: This code is an example of how to control the Blue Robotics
+Thrusters and ESCs with an analog input signal. This can be useful to work
 with devices that output analog signals. The speed is controlled by a 0-5V
-analog input and the direction is controlled by a logical input with 0V for 
+analog input and the direction is controlled by a logical input with 0V for
 reverse and 5V for forward. The code is designed to operate two thrusters
 but can be extended to operate more.
 
-The code is designed for the Arduino Uno board and can be compiled and 
+The code is designed for the Arduino Uno board and can be compiled and
 uploaded via the Arduino 1.0+ software.
 
 -------------------------------
@@ -60,8 +60,8 @@ void setup() {
   Serial.begin(38400);
 
   // Set up direction pins as inputs
-  pinMode(DIRECTION_0,INPUT);
-  pinMode(DIRECTION_1,INPUT);
+  pinMode(DIRECTION_0, INPUT);
+  pinMode(DIRECTION_1, INPUT);
 
   // Set up Arduino pins to send servo signals to ESCs
   thruster0.attach(THRUSTER_0);
@@ -72,7 +72,7 @@ void setup() {
   thruster0.writeMicroseconds(CENTER_THROTTLE);
 
   // Delay to allow time for ESCs to initialize
-  delay(1000); 
+  delay(1000);
 }
 
 void loop() {
@@ -81,8 +81,8 @@ void loop() {
   int input1 = analogRead(ANALOG_IN_1)*(digitalRead(DIRECTION_1)*2-1);
 
   // Map analog input to a PWM output command given in microseconds
-  int output0 = map(input0,-1023,1023,CENTER_THROTTLE-MAX_FWD_REV_THROTTLE,CENTER_THROTTLE+MAX_FWD_REV_THROTTLE);
-  int output1 = map(input1,-1023,1023,CENTER_THROTTLE-MAX_FWD_REV_THROTTLE,CENTER_THROTTLE+MAX_FWD_REV_THROTTLE);
+  int output0 = map(input0, -1023, 1023, CENTER_THROTTLE-MAX_FWD_REV_THROTTLE, CENTER_THROTTLE+MAX_FWD_REV_THROTTLE);
+  int output1 = map(input1, -1023, 1023, CENTER_THROTTLE-MAX_FWD_REV_THROTTLE, CENTER_THROTTLE+MAX_FWD_REV_THROTTLE);
 
   // Output command to ESCs
   thruster0.writeMicroseconds(output0);

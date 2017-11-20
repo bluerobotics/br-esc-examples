@@ -1,13 +1,13 @@
 /* Blue Robotics Example Code
 -------------------------------
- 
+
 Title: BlueESC Control via I2C (Arduino)
 
 Description: This example code demonstrates the I2C communication capability
-of the Blue Robotics "BlueESC". Motor speed commands are sent via I2C and 
+of the Blue Robotics "BlueESC". Motor speed commands are sent via I2C and
 voltage, current, rpm, and temperature data is returned.
 
-The code is designed for the Arduino Uno board and can be compiled and 
+The code is designed for the Arduino Uno board and can be compiled and
 uploaded via the Arduino 1.0+ software.
 
 -------------------------------
@@ -43,26 +43,26 @@ THE SOFTWARE.
 #define I2C_ADDR 0x29
 
 // resistance at 25 degrees C
-#define THERMISTORNOMINAL 10000      
+#define THERMISTORNOMINAL 10000
 // temp. for nominal resistance (almost always 25 C)
-#define TEMPERATURENOMINAL 25   
+#define TEMPERATURENOMINAL 25
 // The beta coefficient of the thermistor (usually 3000-4000)
 #define BCOEFFICIENT 3900
 // the value of the 'other' resistor
-#define SERIESRESISTOR 3300    
+#define SERIESRESISTOR 3300
 
 // Read the incoming data buffer from an ESC
 void readBuffer(uint8_t address, uint8_t buffer[]) {
   Wire.beginTransmission(address);
   Wire.write(0x02); // Data start register
   Wire.endTransmission();
-  
+
   delay(100);
-    
-  Wire.requestFrom(address,uint8_t(9));
+
+  Wire.requestFrom(address, uint8_t(9));
   delay(100);
   uint8_t i = 0;
-  while(Wire.available()) {
+  while (Wire.available()) {
     buffer[i] = Wire.read();
     i++;
   }
@@ -73,11 +73,11 @@ void initESC(uint8_t address) {
   uint8_t buffer[9];
 
   delay(100); // Wait for ESCs to boot if starting up
-  
+
   buffer[8] = 0x00;
-  readBuffer(address,buffer);
-  
-  if ( buffer[8] == 0xab ) {
+  readBuffer(address, buffer);
+
+  if (buffer[8] == 0xab) {
     Serial.println("ESC is alive!");
   } else {
     Serial.println("Can't contact ESC.");
@@ -85,21 +85,21 @@ void initESC(uint8_t address) {
 }
 
 // Send motor speed command to ESC
-void setESC(uint8_t address, int16_t value) {  
+void setESC(uint8_t address, int16_t value) {
   uint16_t output;
 
   Wire.beginTransmission(address);
   Wire.write(0x00);
   Wire.write(value>>8);
-  Wire.write(value);  
+  Wire.write(value);
   Wire.endTransmission();
 }
 
 void readSensors(uint8_t address, uint16_t *rpm, uint16_t *vbat, uint16_t *temp, uint16_t *curr) {
   uint8_t buffer[9];
-  
-  readBuffer(address,buffer);
-  
+
+  readBuffer(address, buffer);
+
   *rpm = (buffer[0] << 8) | buffer[1];
   *vbat = (buffer[2] << 8) | buffer[3];
   *temp = (buffer[4] << 8) | buffer[5];
@@ -110,45 +110,45 @@ void setup() {
   Wire.begin();
   Serial.begin(57600);
   Serial.println("Starting");
-  
+
   initESC(I2C_ADDR);
 }
 
 void loop() {
   static uint32_t writeTimer = 0;
   static uint32_t readTimer = 0;
-  
+
   static int16_t signal = 0;
-  
-  if ( millis() - writeTimer > 10 ) {
+
+  if (millis() - writeTimer > 10) {
     writeTimer = millis();
-  
+
     static int16_t increment = 200;
-    
+
     if (Serial.available()) {
       signal = Serial.parseInt();
     }
-    
-    setESC(I2C_ADDR,signal);    
-    
+
+    setESC(I2C_ADDR, signal);
+
     //signal += increment;
-    
-    if ( abs(signal) > 32500 ) {
+
+    if (abs(signal) > 32500) {
       increment = -increment;
     }
   }
-  
-  if ( micros() - readTimer > 100000 ) {
+
+  if (micros() - readTimer > 100000) {
     uint32_t dt = micros() - readTimer;
-    
+
     readTimer = micros();
-    
+
     uint16_t rpm, vbat, temp, curr;
-    
-    readSensors(I2C_ADDR,&rpm,&vbat,&temp,&curr);
-    
+
+    readSensors(I2C_ADDR, &rpm, &vbat, &temp, &curr);
+
     float resistance = SERIESRESISTOR/(65535/float(temp)-1);
-    
+
     float steinhart;
     steinhart = resistance / THERMISTORNOMINAL;     // (R/Ro)
     steinhart = log(steinhart);                  // ln(R/Ro)
@@ -156,11 +156,11 @@ void loop() {
     steinhart += 1.0 / (TEMPERATURENOMINAL + 273.15); // + (1/To)
     steinhart = 1.0 / steinhart;                 // Invert
     steinhart -= 273.15;                         // convert to C
-    
+
     static float current;
-    
+
     current = current*0.9 + (float(curr)-32767)/65535.0f*5*14.706*0.1;
-    
+
     Serial.write(27);       // ESC command
     Serial.print("[2J");    // clear screen command
     Serial.write(27);
