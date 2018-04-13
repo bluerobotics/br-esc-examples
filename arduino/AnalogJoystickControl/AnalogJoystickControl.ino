@@ -83,7 +83,7 @@ void setup() {
   thrusterVertical.writeMicroseconds(CENTER_THROTTLE);
 
   // Delay to allow time for ESCs to initialize
-  delay(1000); 
+  delay(7000); 
 }
 
 void loop() {
