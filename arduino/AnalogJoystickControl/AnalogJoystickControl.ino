@@ -1,15 +1,15 @@
 /* Blue Robotics Example Code
 -------------------------------
- 
+
 Title: Analog Joystick Control Example (Arduino)
 
-Description: This code is an example of how to use the Blue Robotics thrusters 
-and ESCs to control a simple underwater vehicle. The code is designed to use 
-analog joysticks (http://www.parallax.com/product/27808) and three thrusters. 
-The thrusters are oriented with two pointing forward, one on the left and one 
-on the right side of the vehicle, as well as a vertical thruster. 
+Description: This code is an example of how to use the Blue Robotics thrusters
+and ESCs to control a simple underwater vehicle. The code is designed to use
+analog joysticks (http://www.parallax.com/product/27808) and three thrusters.
+The thrusters are oriented with two pointing forward, one on the left and one
+on the right side of the vehicle, as well as a vertical thruster.
 
-The code is designed for the Arduino Uno board and can be compiled and 
+The code is designed for the Arduino Uno board and can be compiled and
 uploaded via the Arduino 1.0+ software.
 
 -------------------------------
@@ -83,7 +83,7 @@ void setup() {
   thrusterVertical.writeMicroseconds(CENTER_THROTTLE);
 
   // Delay to allow time for ESCs to initialize
-  delay(7000); 
+  delay(7000);
 }
 
 void loop() {
@@ -105,16 +105,19 @@ void loop() {
                               -MAX_VERTICAL_THROTTLE, // Command low value
                               MAX_VERTICAL_THROTTLE); // Command high value
 
-  // Combine the "stopped" command with forward, turn, and vertical and send 
+  // Combine the "stopped" command with forward, turn, and vertical and send
   // to the ESCs.
   thrusterLeft.writeMicroseconds(CENTER_THROTTLE+forwardCommand+turnCommand);
   thrusterRight.writeMicroseconds(CENTER_THROTTLE+forwardCommand-turnCommand);
   thrusterVertical.writeMicroseconds(CENTER_THROTTLE+verticalCommand);
 
   // Output via serial
-  Serial.print("Fwd: "); Serial.print(forwardCommand);
-  Serial.print("Turn: "); Serial.print(turnCommand);
-  Serial.print("Vert: "); Serial.print(verticalCommand);
+  Serial.print("Fwd: ");
+  Serial.print(forwardCommand);
+  Serial.print("Turn: ");
+  Serial.print(turnCommand);
+  Serial.print("Vert: ");
+  Serial.print(verticalCommand);
   Serial.println("");
 
   // Delay 1/10th of a second. No need to update at super fast rates.

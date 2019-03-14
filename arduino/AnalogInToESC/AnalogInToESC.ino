@@ -1,16 +1,16 @@
 /* Blue Robotics Example Code
 -------------------------------
- 
+
 Title: Analog Input to ESC Output (Arduino)
 
-Description: This code is an example of how to control the Blue Robotics 
-Thrusters and ESCs with an analog input signal. This can be useful to work 
+Description: This code is an example of how to control the Blue Robotics
+Thrusters and ESCs with an analog input signal. This can be useful to work
 with devices that output analog signals. The speed is controlled by a 0-5V
-analog input and the direction is controlled by a logical input with 0V for 
+analog input and the direction is controlled by a logical input with 0V for
 reverse and 5V for forward. The code is designed to operate two thrusters
 but can be extended to operate more.
 
-The code is designed for the Arduino Uno board and can be compiled and 
+The code is designed for the Arduino Uno board and can be compiled and
 uploaded via the Arduino 1.0+ software.
 
 -------------------------------
@@ -72,7 +72,7 @@ void setup() {
   thruster0.writeMicroseconds(CENTER_THROTTLE);
 
   // Delay to allow time for ESCs to initialize
-  delay(7000); 
+  delay(7000);
 }
 
 void loop() {
@@ -89,8 +89,10 @@ void loop() {
   thruster1.writeMicroseconds(output1);
 
   // Output via serial (for debugging)
-  Serial.print("Motor 0: "); Serial.print(output0);
-  Serial.print("Motor 1: "); Serial.print(output1);
+  Serial.print("Motor 0: ");
+  Serial.print(output0);
+  Serial.print("Motor 1: ");
+  Serial.print(output1);
   Serial.println("");
 
   // Delay 1/20th of a second. No need to update at super fast rates.
